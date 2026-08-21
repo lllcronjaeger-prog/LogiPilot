@@ -1,0 +1,8 @@
+# Ergänzung für app/ui/main_window.py
+
+from app.imports.importer import import_dispotest
+
+# In import_file() direkt nach detect():
+# rows = import_dispotest(f)
+# self.info.setText(self.info.text()+f"\nImportiert: {rows} Sendungen")
+# Danach load_selected_week(weeks[0]) aufrufen.
