@@ -1,0 +1,44 @@
+--- a/app/ui/main_window.py
++++ b/app/ui/main_window.py
+@@
+-from app.imports.detector import detect, available_weeks
++from app.imports.detector import detect, available_weeks
++from app.services.shipment_service import get_week_dataframe
+@@
+ def import_file(self, path):
+     det = detect(path)
+     weeks, header, col = available_weeks(path, det)
+@@
+-    self.combo.clear()
+-    self.combo.addItems(weeks)
++    self.combo.clear()
++    self.combo.addItems(weeks)
++    self.combo.currentTextChanged.connect(self.load_selected_week)
++
++    if weeks:
++        self.load_selected_week(weeks[0])
++
++def load_selected_week(self, week_text):
++    import re
++    m = re.search(r"KW\s*(\d+)", week_text)
++    if not m:
++        return
++    week = int(m.group(1))
++    df = get_week_dataframe(week)
++
++    self.c_kw.val.setText(week_text)
++    self.c_ship.val.setText(str(len(df)))
++    self.c_ent.val.setText(str(df["Unternehmer"].nunique() if "Unternehmer" in df.columns else 0))
++    self.c_fleet.val.setText(str(df["Kennzeichen"].nunique() if "Kennzeichen" in df.columns else 0))
++
++    self.table.setRowCount(len(df))
++    self.table.setColumnCount(4)
++    self.table.setHorizontalHeaderLabels(
++        ["Kennzeichen", "Unternehmer", "Entladedatum", "Status"]
++    )
++
++    for r, (_, row) in enumerate(df.iterrows()):
++        self.table.setItem(r,0,QTableWidgetItem(str(row.get("Kennzeichen",""))))
++        self.table.setItem(r,1,QTableWidgetItem(str(row.get("Unternehmer",""))))
++        self.table.setItem(r,2,QTableWidgetItem(str(row.get("Entladedatum",""))))
++        self.table.setItem(r,3,QTableWidgetItem("Importiert"))

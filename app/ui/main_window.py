@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import Qt, QDate
 from app.imports.detector import detect, available_weeks
+from app.services.shipment_service import get_week_dataframe
 
 class DropArea(QFrame):
     def __init__(self, cb):
@@ -77,7 +78,7 @@ class MainWindow(QMainWindow):
 
         self.info=QLabel("Noch keine Datei ausgewählt."); mv.addWidget(self.info)
 
-        self.combo=QComboBox(); self.combo.hide(); mv.addWidget(self.combo)
+        self.combo=QComboBox(); self.combo.hide(); self.combo.currentTextChanged.connect(self.load_selected_week); mv.addWidget(self.combo)
 
         self.table=QTableWidget(0,4)
         self.table.setHorizontalHeaderLabels(["Kennzeichen","Unternehmer","Sendungen","Status"])
@@ -96,5 +97,29 @@ class MainWindow(QMainWindow):
         det=detect(f); weeks,header,col=available_weeks(f,det)
         self.info.setText(f"Quelle: {det.source}\nDatei: {f.split('/')[-1]}")
         self.combo.clear(); self.combo.addItems(weeks or ["Keine KW gefunden"]); self.combo.show()
-        self.c_kw.val.setText(weeks[0] if weeks else "-")
         self.diag.setPlainText(f"Importdiagnose\nDatei: {f.split('/')[-1]}\nQuelle: {det.source}\nBlatt: {det.sheet}\nKopfzeile: {header}\nDatumsspalte: {col}\nKalenderwochen: {', '.join(weeks) if weeks else 'Keine'}")
+        if weeks:
+            self.load_selected_week(weeks[0])
+
+    def load_selected_week(self, week_text):
+        m=re.search(r"KW\s*(\d+)", week_text)
+        if not m:
+            return
+        week=int(m.group(1))
+        df=get_week_dataframe(week)
+        self.c_kw.val.setText(week_text)
+        self.c_ship.val.setText(str(len(df)))
+        self.c_ent.val.setText(str(df["Unternehmer"].nunique()) if "Unternehmer" in df.columns else "0")
+        plate_col=next((c for c in ["Kennzeichen","kennzeichen"] if c in df.columns),None)
+        self.c_fleet.val.setText(str(df[plate_col].nunique()) if plate_col else "0")
+        cols=[c for c in ["Kennzeichen","kennzeichen","Unternehmer","unternehmer","Entladedatum","entladedatum"] if c in df.columns]
+        self.table.clear()
+        self.table.setColumnCount(max(4,len(cols)))
+        headers=["Kennzeichen","Unternehmer","Entladedatum","Status"]
+        self.table.setHorizontalHeaderLabels(headers)
+        self.table.setRowCount(len(df))
+        for r,(_,row) in enumerate(df.iterrows()):
+            self.table.setItem(r,0,QTableWidgetItem(str(row.get("Kennzeichen",row.get("kennzeichen","")))))
+            self.table.setItem(r,1,QTableWidgetItem(str(row.get("Unternehmer",row.get("unternehmer","")))))
+            self.table.setItem(r,2,QTableWidgetItem(str(row.get("Entladedatum",row.get("entladedatum","")))))
+            self.table.setItem(r,3,QTableWidgetItem("Importiert"))
