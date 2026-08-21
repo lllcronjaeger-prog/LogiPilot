@@ -1,7 +1,7 @@
 import sqlite3, importlib
 from pathlib import Path
 DB_PATH=Path(__file__).resolve().parents[2]/'data'/'logipilot.db'
-MIGRATIONS=['001_initial','002_import_history','003_vehicle_alias','004_shipments' ,'005_week_sessions','006_filters','007_fleet']
+MIGRATIONS=['001_initial','002_import_history','003_vehicle_alias','004_shipments' ,'005_week_sessions','006_filters','007_fleet','008_week_filter_state','009_vehicle_uid','010_export_history']
 def run_migrations():
     DB_PATH.parent.mkdir(exist_ok=True)
     con=sqlite3.connect(DB_PATH); cur=con.cursor()
