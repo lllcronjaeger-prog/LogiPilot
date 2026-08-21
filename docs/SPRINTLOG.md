@@ -1,6 +1,7 @@
 
-# Sprint 0.4.3
+# Sprint 0.4.5
 
-- PandasTableModel eingeführt.
-- Erste Arbeitsansicht erstellt.
-- Import-Service für Kalenderwochen vorbereitet.
+- Import-Pipeline modularisiert.
+- DispoTest- und Speditionsbuch-Erkennung getrennt.
+- Wochenimport vorbereitet.
+- Importhistorie-Service ergänzt.
