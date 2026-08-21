@@ -1,0 +1,1 @@
+Ergänze 006_filters und 007_fleet in app/database/migrate.py

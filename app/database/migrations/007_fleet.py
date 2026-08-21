@@ -1,0 +1,1 @@
+def migrate(cursor): cursor.execute("CREATE TABLE IF NOT EXISTS fleet_vehicles(id INTEGER PRIMARY KEY AUTOINCREMENT, kennzeichen TEXT UNIQUE, standort TEXT, aktiv INTEGER DEFAULT 1, standardfahrer TEXT)")

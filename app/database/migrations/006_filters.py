@@ -1,0 +1,1 @@
+def migrate(cursor): cursor.execute("CREATE TABLE IF NOT EXISTS week_filters(id INTEGER PRIMARY KEY AUTOINCREMENT, year INTEGER, week INTEGER, entrepreneur TEXT, enabled INTEGER DEFAULT 1)")
