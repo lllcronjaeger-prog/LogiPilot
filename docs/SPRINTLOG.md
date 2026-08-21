@@ -1,13 +1,14 @@
-# Sprint 0.6.0
+
+# Sprint 0.6.1
 
 ## Erledigt
 
-- Projektdokumentation angelegt.
-- Architektur dokumentiert.
-- Datenbankübersicht dokumentiert.
-- Importpipeline dokumentiert.
+- WeekView erstellt.
+- PandasModel erstellt.
+- Shipment-Service ergänzt.
+- week_sessions-Migration vorbereitet.
 
 ## Nächster Sprint
 
 - WeekView nach KW-Auswahl automatisch öffnen.
-- Daten direkt aus SQLite laden.
+- Daten aus SQLite direkt in die Ansicht laden.

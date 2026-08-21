@@ -1,10 +1,23 @@
-from PySide6.QtCore import Qt,QAbstractTableModel
+
+from PySide6.QtCore import Qt, QAbstractTableModel
+
 class PandasModel(QAbstractTableModel):
-    def __init__(self,df): super().__init__(); self.df=df
-    def rowCount(self,p=None): return len(self.df.index)
-    def columnCount(self,p=None): return len(self.df.columns)
-    def data(self,i,r=Qt.DisplayRole):
-        return str(self.df.iat[i.row(),i.column()]) if r==Qt.DisplayRole else None
-    def headerData(self,s,o,r=Qt.DisplayRole):
-        if r!=Qt.DisplayRole: return None
-        return str(self.df.columns[s]) if o==Qt.Horizontal else str(s+1)
+    def __init__(self, dataframe):
+        super().__init__()
+        self.df=dataframe
+
+    def rowCount(self,parent=None):
+        return len(self.df.index)
+
+    def columnCount(self,parent=None):
+        return len(self.df.columns)
+
+    def data(self,index,role=Qt.DisplayRole):
+        if role==Qt.DisplayRole:
+            return str(self.df.iat[index.row(), index.column()])
+        return None
+
+    def headerData(self,section,orientation,role=Qt.DisplayRole):
+        if role!=Qt.DisplayRole:
+            return None
+        return str(self.df.columns[section]) if orientation==Qt.Horizontal else str(section+1)
