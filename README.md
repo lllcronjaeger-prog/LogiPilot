@@ -1,2 +1,1 @@
-# LogiPilot v0.3.1
-Erster produktiver Import.
+Ergänze 006_filters und 007_fleet in app/database/migrate.py und kopiere die Dateien ins Repository.
