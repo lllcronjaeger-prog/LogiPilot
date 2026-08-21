@@ -1,7 +1,13 @@
+# Sprint 0.6.0
 
-# Sprint 0.4.5
+## Erledigt
 
-- Import-Pipeline modularisiert.
-- DispoTest- und Speditionsbuch-Erkennung getrennt.
-- Wochenimport vorbereitet.
-- Importhistorie-Service ergänzt.
+- Projektdokumentation angelegt.
+- Architektur dokumentiert.
+- Datenbankübersicht dokumentiert.
+- Importpipeline dokumentiert.
+
+## Nächster Sprint
+
+- WeekView nach KW-Auswahl automatisch öffnen.
+- Daten direkt aus SQLite laden.
