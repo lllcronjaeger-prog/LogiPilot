@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import Qt, QDate
 from app.imports.detector import detect, available_weeks
 from app.services.shipment_service import get_week_dataframe
+from app.imports.importer import import_dispotest
 
 class DropArea(QFrame):
     def __init__(self, cb):
@@ -94,7 +95,7 @@ class MainWindow(QMainWindow):
         if f:self.import_file(f)
 
     def import_file(self,f):
-        det=detect(f); weeks,header,col=available_weeks(f,det)
+        det=detect(f); rows=import_dispotest(f); weeks,header,col=available_weeks(f,det)
         self.info.setText(f"Quelle: {det.source}\nDatei: {f.split('/')[-1]}")
         self.combo.clear(); self.combo.addItems(weeks or ["Keine KW gefunden"]); self.combo.show()
         self.diag.setPlainText(f"Importdiagnose\nDatei: {f.split('/')[-1]}\nQuelle: {det.source}\nBlatt: {det.sheet}\nKopfzeile: {header}\nDatumsspalte: {col}\nKalenderwochen: {', '.join(weeks) if weeks else 'Keine'}")
